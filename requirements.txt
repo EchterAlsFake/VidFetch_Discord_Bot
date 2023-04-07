@@ -1,0 +1,4 @@
+pytube
+colorama
+discord
+python-dotenv
