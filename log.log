@@ -6,3 +6,11 @@ regex_search: could not find match for (?:v=|\/)([0-9A-Za-z_-]{11}).*
 local variable 'url' referenced before assignment
 2023-04-07 21:24:23
 local variable 'url' referenced before assignment
+2023-04-08 14:31:27
+Exception while accessing title of https://youtube.com/watch?v=ZvAyTUS7kMA. Please file a bug report at https://github.com/pytube/pytube
+2023-04-08 14:31:34
+Exception while accessing title of https://youtube.com/watch?v=JqGcefgFD-s. Please file a bug report at https://github.com/pytube/pytube
+2023-04-08 14:31:44
+'_MissingSentinel' object has no attribute 'create_task'
+2023-04-08 17:33:57
+'_MissingSentinel' object has no attribute 'create_task'
