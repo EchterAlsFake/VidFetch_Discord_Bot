@@ -47,6 +47,13 @@ But you can do some things too:
 
 - 1.0 Initial release of the basic bot. 
 
+# -1.1
+
+### - Playlist Support
+### - Support for German Language
+### - Implemented Threading
+### - Code Refactoring
+
 ## Credits:
 
 Icon: https://uxwing.com/black-and-white-youtube-icon/ <br>
