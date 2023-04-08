@@ -36,11 +36,11 @@ But you can do some things too:
 
 ## To-Do List:
 
-- Code refactoring
-- Support for other languages than English
-- Threading for the whole Bot
-- Playlist Support
-- 24/7 hosting
+- Code refactoring : ✓
+- Support for other languages than English : German ✓, French: ✘, Spanish: ✘, Japanese: ✘  (More comming soon) 
+- Threading for the whole Bot : ✓
+- Playlist Support : ✓
+- 24/7 hosting : ✘
 
 
 ## Releases:
