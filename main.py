@@ -202,7 +202,7 @@ async def playlist(interaction: discord.Interaction, url : str, language : str):
 @bot.tree.command(name="help", description="Shows a simple tutorial message.")
 async def help(interaction: discord.Interaction):
     def send_help_thread():
-        await interaction.response.send_message("""
+        bot.loop.create_task(interaction.response.send_message("""
 
 Commands:
 
@@ -210,7 +210,7 @@ Commands:
 /download [url] - Downloads the video and sends it back as .m4a file
 /credits - shows the sources / developing process
 
-""")
+"""))
 
     t = threading.Thread(target=send_help_thread)
     t.start()
@@ -218,7 +218,7 @@ Commands:
 @bot.tree.command(name="credits", description="Shows all sources.")
 async def credits(interaction: discord.Interaction):
     def send_credits_thread():
-        await interaction.response.send_message("""
+        bot.loop.create_task(interaction.response.send_message("""
 
 Vid Fetch is the Discord Bot of the Vid Fetch YouTube Downloader, which were
 both created by EchterAlsFake in 2023. The Discord Bot itself is licensed under the 
@@ -235,7 +235,7 @@ I can not guarantee for 24/7 Support or functionality!
 
 
 Have a great day :) 
-""")
+"""))
 
 
     t = threading.Thread(target=send_credits_thread)
