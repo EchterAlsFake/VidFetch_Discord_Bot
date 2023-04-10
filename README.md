@@ -9,6 +9,13 @@ user as .m4a file.
 
 The Bot was created on 6th April in 2023 by EchterAlsFake
 
+## Hosting:
+
+I have hosted the Bot on my old Laptop now. I can't guarantee for any stability.
+It might be the case that you get random crashes. Note, that this is my first project!
+
+I need some experience, so give me time to fix all errors that maybe happen. 
+
 
 ## Official Server:
 
@@ -36,11 +43,7 @@ But you can do some things too:
 
 ## To-Do List:
 
-- Code refactoring : ✓
-- Support for other languages than English : German ✓, French: ✘, Spanish: ✘, Japanese: ✘  (More comming soon) 
-- Threading for the whole Bot : ✓
-- Playlist Support : ✓
-- 24/7 hosting : ✘
+ - Nothing now.. 
 
 
 ## Releases:
