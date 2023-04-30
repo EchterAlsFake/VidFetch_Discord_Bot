@@ -1,9 +1,9 @@
 # STATUS
 
-### NOW WORKING
+## NOT WORKING
 
-There are some problems with Pytube.  I will continue developing
-if they fixed them. 
+### There are some problems with Pytube.  I will continue developing
+### if they fixed them. 
 
 # Vid Fetch Discord Bot
 
