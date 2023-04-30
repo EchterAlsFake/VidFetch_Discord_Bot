@@ -1,3 +1,10 @@
+# STATUS
+
+### NOW WORKING
+
+There are some problems with Pytube.  I will continue developing
+if they fixed them. 
+
 # Vid Fetch Discord Bot
 
 # [Invite Link](https://discord.com/oauth2/authorize?client_id=1093631510428516434&permissions=2147486720&scope=bot)
