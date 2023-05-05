@@ -1,29 +1,22 @@
-# STATUS
-
-## NOT WORKING
-
-### There are some problems with Pytube.  I will continue developing if they fixed them. 
-
 # Vid Fetch Discord Bot
+## Status: ✔
 
 # [Invite Link](https://discord.com/oauth2/authorize?client_id=1093631510428516434&permissions=2147486720&scope=bot)
 
-## What is it? 
+# What is it? 
 
-Vid Fetch Bot is a Discord Bot, that downloads YouTube Videos and sends them back to the
-user as .m4a file.
+Vid Fetch Bot is a Discord Bot, which downloads YouTube Videos and sends them back to the
+user as .m4a file. It can download all kind of music videos in average of 30 seconds. It has an easy application command interface.
 
 The Bot was created on 6th April in 2023 by EchterAlsFake
 
-## Hosting:
+# Availability
 
-I have hosted the Bot on my old Laptop now. I can't guarantee for any stability.
-It might be the case that you get random crashes. Note, that this is my first project!
-
-I need some experience, so give me time to fix all errors that maybe happen. 
+I have no money for servers. I am currently hosting this Bot on my old Laptop with my own Network. My Internet speed is 12.5 Megabytes per second (100000). It should be no problem to down and upload all videos.
+My Laptop is ancient. You can expect, that it maybe crashes or sometimes anything gets stuck. In this case, Just come back and try again later ;) 
 
 
-## Official Server:
+## Official Community Server:
 
 ### [Invite Link](https://discord.gg/CFTNHxgXje)
 
@@ -32,8 +25,6 @@ I need some experience, so give me time to fix all errors that maybe happen.
 ## Common Bugs and Errors
 
 You will probably sometimes face an error. This is normal and I am always trying to fix it as fast as I can.
-
-All errors are logged in a file. I will have a look at this file from time to time and try to fix the stuff.
 
 But you can do some things too:
 
@@ -44,24 +35,39 @@ But you can do some things too:
 - Make sure the video is a public video which can be accessed by everyone
 
 
-#### Downloads can take some time  ~ 2-3 minutes.  This is normal! 
+#### Downloads can take some time  ~ 1-3 minutes.  This is normal! 
 
 
 ## To-Do List:
 
- - Nothing now.. 
+ - Adding support for Playlists
+ - Adding support for Logging
+ - Adding support for other languages for Exception Handling
 
 
 ## Releases:
 
 - 1.0 Initial release of the basic bot. 
 
-# -1.1
+## -1.1
 
-### - Playlist Support
-### - Support for German Language
-### - Implemented Threading
-### - Code Refactoring
+#### - Playlist Support
+#### - Support for German Language
+#### - Implemented Threading
+#### - Code Refactoring
+
+##  1.2
+### Positive things:
+
+- *** Code refactoring *** 
+- A higher bitrate for the music (better quality)
+- Added support for switching between slow and high speed downloads
+- Removed unnecessary dependencies
+
+### Negative things:
+
+- Removed the Playlist support from 1.1 (Will come back, don't worry)
+- Removed support for german language (Will come back, don't worry)
 
 ## Credits:
 
