@@ -40,7 +40,7 @@ But you can do some things too:
 
 ## To-Do List:
 
- - Adding support for Playlists
+ - Adding support for Playlists : ✔
  - Adding support for Logging
  - Adding support for other languages for Exception Handling
 
@@ -68,6 +68,12 @@ But you can do some things too:
 
 - Removed the Playlist support from 1.1 (Will come back, don't worry)
 - Removed support for german language (Will come back, don't worry)
+
+## 1.3
+
+- Added Playlist support
+- Added support for German
+- Playlist has multithreading support
 
 ## Credits:
 
