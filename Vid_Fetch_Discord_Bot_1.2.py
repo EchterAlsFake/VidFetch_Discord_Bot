@@ -1,6 +1,6 @@
 import threading
 import time
-from pytube import YouTube
+from pytube import YouTube, Playlist
 from colorama import *
 import discord
 from discord.ext import commands
@@ -55,6 +55,21 @@ download_queue = queue.Queue()
 num_threads = 12
 semaphore = threading.Semaphore(num_threads)
 
+def download_playlist(fast_download, user, url):
+
+    try:
+        p = Playlist(url)
+
+    except Exception as e:
+        print(e)
+
+    p = Playlist(url)
+    # Enumerating videos
+
+    for video in p.video_urls:
+        download_queue.put(video)
+        t1 = threading.Thread(target=download, args=(fast_download, user))
+        t1.start()
 
 def download(fast_download, user):
     while True:
@@ -138,11 +153,50 @@ def clean_up(file1, file2):
     os.remove(file2)
     print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTYELLOW_EX + "Cleaned Up!")
 
-
-
 @bot.tree.command(name="download", description="Please set Fast Download to False. It helps my CPU, thanks.)")
-async def hello(interaction: discord.Interaction, url : str, fast_download : bool = True):
-    await interaction.response.send_message("Proceeding your request...  Downloads will depend on 1-3 minutes.  Thanks.")
+async def video(interaction: discord.Interaction, url : str, fast_download : bool = True, language : str = "en"):
+
+    if fast_download:
+        fast_download_msg = "✔"
+
+    elif fast_download == False:
+        fast_download = "✖"
+
+    else:
+        fast_download_msg = "?"
+
+    if language == "en" or language == "de":
+        pass
+
+    else:
+        await interaction.response.send_message(f"""
+Sorry {language} is not available.
+
+1) de - German / Deutsch
+2) en - English / English  (default)
+
+
+""")
+
+    if language == "en":
+
+        await interaction.response.send_message(f"""
+Downloading: {url}
+
+The download / upload will take 1-3 minutes. 
+You will get a message in your DMs with the .m4a file.
+
+Fast Download: {fast_download_msg}""")
+
+    elif language == "de":
+        await interaction.response.send_message(f"""
+Downloading: {url}
+
+Das Herunterladen und Hochladen wird ca. 1-3 Minuten dauern.
+Schau in deinen DMs nach der .m4a Datei.
+
+Schneller Download: {fast_download_msg}""")
+
     user = interaction.user
     download_queue.put(url)
 
@@ -152,10 +206,60 @@ async def hello(interaction: discord.Interaction, url : str, fast_download : boo
     except Exception as e:
         bot.loop.create_task(user.send(f"ERROR: {e}"))
 
-@bot.tree.command(name="help", description="Shows a simple tutorial message.")
-async def help(interaction: discord.Interaction):
+@bot.tree.command(name="playlist", description="Downloads all videos in a playlist.  See /help for more info")
+async def playlist(interaction: discord.Interaction, url : str, fast_download : bool = True, language : str = "en"):
+
+    if fast_download:
+        fast_download_msg = "✔"
+
+    elif fast_download == False:
+        fast_download_msg = "✖"
+
+    else:
+        fast_download_msg = "?"
+
+    if language == "en" or language == "de":
+        pass
+
+    else:
+        await interaction.response.send_message(f"""
+Sorry, {language} is not available.
+
+1) de - German / Deutsch
+2) en - English / English  (default)
+
+
+""")
+
+    if language == "en":
+        await interaction.response.send_message(f"""
+The following playlist will be downloaded: {url}
+Check your DMs for more information.
+
+Fast Download: {fast_download_msg}""")
+
+    elif language == "de":
+        await interaction.response.send_message(f"""
+Die folgende Playlist wird herunterladen: {url}
+Schau in deinen DMs für mehr Informationen.
+
+Schneller Download: {fast_download_msg}
+""")
+
     user = interaction.user
-    def send_help_thread():
+
+    try:
+
+        t1 = threading.Thread(target=download_playlist, args=(fast_download, user, url,))
+        t1.start()
+
+    except Exception as e:
+        print(e)
+
+@bot.tree.command(name="help", description="Shows a simple tutorial message.")
+async def help(interaction: discord.Interaction, language : str = "en"):
+    user = interaction.user
+    def send_help_english_thread():
         bot.loop.create_task(interaction.response.send_message("""
 
 Commands:
@@ -178,19 +282,61 @@ on my GitHub, so that I can fix them. Thanks :)
 
 """))
 
-    try:
-        t = threading.Thread(target=send_help_thread)
-        t.start()
-    except Exception as e:
-        bot.loop.create_task(user.send_message(f"ERROR: {e}"))
+    def send_help_german_thread():
+        bot.loop.create_task(interaction.response.send_message("""
 
+Befehle:
+
+/help - Zeigt diese Nachricht an
+/download [url] - Lädt ein Video herunter und sendet es dir als .m4a Datei.
+/credits - Zeigt die Quellen und ein paar Entwickler Informationen.
+
+Optional:
+
+/download [fast_download] - True:  Lädt das Video sehr schnell herunter.
+                            False: Braucht länger (2-3 Minuten), aber spart mir
+                            ein wenig CPU Leistung. Wenn du etwas Zeit hast, würde ich
+                            dich darum bitten, die Option auf False zu setzen. Danke :) 
+Fehlermeldungen:
+
+Fehlermeldungen werdem zu dem Nutzer gesendet. Du kannst sie auf GitHub melden, dann kann ich sie
+beheben. Danke :) 
+        """))
+
+    if language == "en" or language == "de":
+        pass
+
+    else:
+        await interaction.response.send_message(f"""
+Sorry {language} is not available.
+
+1) de - German / Deutsch
+2) en - English / Englisch (default)
+
+""")
+
+    if language == "en":
+
+        try:
+            t = threading.Thread(target=send_help_english_thread)
+            t.start()
+        except Exception as e:
+            print(e)
+
+    elif language == "de":
+
+        try:
+            t = threading.Thread(target=send_help_german_thread)
+            t.start()
+
+        except Exception as e:
+            print(e)
 
 @bot.tree.command(name="credits", description="Shows all sources.")
-async def credits(interaction: discord.Interaction):
+async def credits(interaction: discord.Interaction, language : str = "en"):
 
     user = interaction.user
-
-    def send_credits_thread():
+    def send_credits_english_thread():
         bot.loop.create_task(interaction.response.send_message("""
 
 Vid Fetch is the Discord Bot of the Vid Fetch YouTube Downloader, which were
@@ -231,16 +377,87 @@ tqdm      - github.com/tqdm/tqdm
 
 Coded with Python 3.9 - 3.11.3
 
-Release: 1.2
-5th of May 2023 - Signed by EchterAlsFake
+Release: 1.3
+6th of May 2023 - Signed by EchterAlsFake
 """))
 
+    def send_credits_german_thread():
+        bot.loop.create_task(interaction.response.send_message("""
 
-    try:
-        t = threading.Thread(target=send_credits_thread)
-        t.start()
-    except Exception as e:
-        bot.loop.create_task(user.send_message(f"ERROR: {e}"))
+Vid Fetch ist der Discord Bot vom Vid Fetch YouTube Downloader, welche beide von 
+EchterAlsFake in 2023 erstellt wurden. Der Bot ist mit der Creative Commons-Lizenz versehen.
+Der Quellcode kann auf der folgenden Website eingesehen werden:
+
+https://github.com/EchterAlsFake/VidFetch_Discord_Bot
+
+Die URL des Bildes: https://uxwing.com/black-and-white-youtube-icon/
+Das Framework zum herunterladen der Videos: https://github.com/pytube/pytube
+
+Der Bot läuft auf meinem eigenen Laptop mit meinem Internet.
+!!! Ich kann für keine Stabilität oder Sicherheit gerantieren !!! 
+
+
+Spendenlink (Nur wenn du möchtest) paypal.me/EchterAlsFake]
+
+Für Entwickler:
+
+Alle benutzten Bibliotheken:
+
+threading - built-in
+time      - built-in
+pytube    - github.com/pytube/pytube
+colorama  - github.com/tartley/colorama
+discord   - github.com/Rapptz/discord.py
+dotenv    - github.com/theskumar/python-dotenv
+os        - built-in
+queue     - built-in
+moviepy   - github.com/Zulko/moviepy
+requests  - github.com/psf/requests
+random    - built-in
+tqdm      - github.com/tqdm/tqdm
+
+Programmiert mit Python 3.9 - 3.11.3
+
+Release: 1.3
+06.05.2023 - Signed by EchterAlsFake"""))
+
+    if language == "en" or language == "de":
+        pass
+
+    else:
+        await interaction.response.send_message(f"""
+Sorry {language} is not available.
+
+1) de - German / Deutsch
+2) en - English / Englisch (default)
+
+
+""")
+
+        try:
+            t = threading.Thread(target=send_credits_english_thread)
+            t.start()
+
+        except Exception as e:
+            print(e)
+
+    if language == "de":
+
+        try:
+            t = threading.Thread(target=send_credits_german_thread)
+            t.start()
+
+        except Exception as e:
+            print(e)
+
+    elif language == "en":
+
+        try:
+            t = threading.Thread(target=send_credits_english_thread)
+            t.start()
+
+        except Exception as e:
+            print(e)
 
 
 @bot.event
