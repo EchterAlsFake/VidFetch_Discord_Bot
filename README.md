@@ -1,6 +1,5 @@
 # Vid Fetch Discord Bot
-## Status: X  (little downtime until - 19:20. Thanks for your understanding)
-
+## Status: ✔
 # [Invite Link](https://discord.com/oauth2/authorize?client_id=1093631510428516434&permissions=2147486720&scope=bot)
 
 # What is it? 
