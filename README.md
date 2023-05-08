@@ -42,7 +42,7 @@ But you can do some things too:
  - Adding support for Playlists : ✔
  - Adding support for Logging
  - Adding support for other languages for Exception Handling
-
+ - Switch to gettext library for other languages (cleaner code yk) 
 
 ## Releases:
 
