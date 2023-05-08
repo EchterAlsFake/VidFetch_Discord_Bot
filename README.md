@@ -2,6 +2,16 @@
 ## Status: ✔
 # [Invite Link](https://discord.com/oauth2/authorize?client_id=1093631510428516434&permissions=2147486720&scope=bot)
 
+# Beta things:
+
+This branch is for tracking my code. It contains untested and unfinished Code.
+Please stay away from this branch and ONLY use the main branch, because I will 
+always test new features before uploading to it.
+
+If you find Issues in my code, DON'T report it, when it's not on the main branch!
+
+
+
 # What is it? 
 
 Vid Fetch Bot is a Discord Bot, which downloads YouTube Videos and sends them back to the
