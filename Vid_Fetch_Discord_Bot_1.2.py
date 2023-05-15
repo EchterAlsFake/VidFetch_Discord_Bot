@@ -11,6 +11,8 @@ from moviepy.editor import AudioFileClip
 import requests
 import random
 from tqdm import tqdm
+import logging
+
 
 """
 Please note:
@@ -28,13 +30,47 @@ It needs the following permissions:
     - Send Messages
 
     Info: You need to enable, that you can get messages from a server member, so that the Bot can send the file.
-    Info: I can not send files, that exceed 8 Megabytes. 
+    Info: I can not send files, which exceed 8 Megabytes. 
 
 https://github.com/EchterAlsFake/VidFetch_Discord_Bot
 
 Thanks :)
 
 """
+
+languages = """
+de - German
+en - English
+es - Spanish
+fr - French
+zh - Chinese
+hi - Hindi
+ar - Arabic
+jp - Japanese
+ru - Russian
+pt - Portuguese
+"""
+language_interaction_response = f"""
+Sorry the selected language is not available yet.
+
+Please use one of the following languages:
+
+{languages}"""
+release = "1.3"
+
+class Logger():
+
+    def error(self, msg):
+        logger = logging.getLogger("discord")
+        logging.basicConfig(filename="log.log")
+        logger.setLevel(logging.ERROR)
+        logger.error(msg)
+
+    def debug(self, msg):
+        logger = logging.getLogger("discord")
+        logging.basicConfig(filename="log.log")
+        logger.setLevel(logging.DEBUG)
+        logger.debug(msg)
 
 
 class Setup():
@@ -47,6 +83,7 @@ class Setup():
         dotenv.load_dotenv()
 
 Setup()
+
 client_secret = os.getenv("TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
@@ -61,7 +98,7 @@ def download_playlist(fast_download, user, url):
         p = Playlist(url)
 
     except Exception as e:
-        print(e)
+        Logger().error(e)
 
     p = Playlist(url)
     # Enumerating videos
@@ -106,7 +143,8 @@ def download(fast_download, user):
                     print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTMAGENTA_EX + "Fast Download: No")
                     download_with_progressbar(url=download_url, filename=title, total_size=size)
                     bot.loop.create_task(user.send(file=discord.File(str(location))))
-                    time.sleep(20)
+                    print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTCYAN_EX + f"Finished request: {title}")
+                    time.sleep(5)
                     clean_up(file1=str(title), file2=str(location))
 
                 elif fast_download == True:
@@ -115,16 +153,15 @@ def download(fast_download, user):
                     audio_stream.download(filename=str(title))
                     location = convert_m4a(filename=str(title))
                     bot.loop.create_task(user.send(file=discord.File(str(location))))
-
-                    time.sleep(20)
+                    print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTCYAN_EX + f"Finished request: {title}")
+                    time.sleep(5)
                     clean_up(file1=str(title), file2=str(location))
 
             except Exception as e:
-                print(e)
+                Logger().error(e)
 
 def download_with_progressbar(url, filename, total_size):
-    response = requests.get(url, stream=True
-                            )
+    response = requests.get(url, stream=True)
     block_size = 8192
     colors = ["red", "green", "yellow", "blue", "magenta", "cyan", "white"]
     color = random.choice(colors)
@@ -139,19 +176,23 @@ def download_with_progressbar(url, filename, total_size):
 
 def convert_m4a(filename):
 
-    audio_stream = AudioFileClip(str(filename))
-    audio_stream.write_audiofile(str(filename) + ".m4a", codec="aac")
+    try:
+        audio_stream = AudioFileClip(str(filename))
+        audio_stream.write_audiofile(str(filename) + ".m4a", codec="aac")
+        location = str(filename) + ".m4a"
+        return location
 
-    location = str(filename) + ".m4a"
-
-    return location
+    except Exception as e:
+        Logger().error(e)
 
 def clean_up(file1, file2):
 
-    print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTCYAN_EX + "Cleaning Up...")
-    os.remove(file1)
-    os.remove(file2)
-    print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTYELLOW_EX + "Cleaned Up!")
+    try:
+        os.remove(file1)
+        os.remove(file2)
+
+    except Exception as e:
+        Logger().error(e)
 
 @bot.tree.command(name="download", description="Please set Fast Download to False. It helps my CPU, thanks.)")
 async def video(interaction: discord.Interaction, url : str, fast_download : bool = True, language : str = "en"):
@@ -165,28 +206,19 @@ async def video(interaction: discord.Interaction, url : str, fast_download : boo
     else:
         fast_download_msg = "?"
 
-    if language == "en" or language == "de":
+    if language == "":
         pass
 
+
     else:
-        await interaction.response.send_message(f"""
-Sorry {language} is not available.
-
-1) de - German / Deutsch
-2) en - English / English  (default)
-
-
-""")
+        await interaction.response.send_message(language_interaction_response)
 
     if language == "en":
 
         await interaction.response.send_message(f"""
-Downloading: {url}
-
 The download / upload will take 1-3 minutes. 
 You will get a message in your DMs with the .m4a file.
-
-Fast Download: {fast_download_msg}""")
+""")
 
     elif language == "de":
         await interaction.response.send_message(f"""
@@ -321,7 +353,7 @@ Sorry {language} is not available.
             t = threading.Thread(target=send_help_english_thread)
             t.start()
         except Exception as e:
-            print(e)
+            Logger().error(e)
 
     elif language == "de":
 
@@ -330,7 +362,7 @@ Sorry {language} is not available.
             t.start()
 
         except Exception as e:
-            print(e)
+            Logger().error(e)
 
 @bot.tree.command(name="credits", description="Shows all sources.")
 async def credits(interaction: discord.Interaction, language : str = "en"):
@@ -439,7 +471,7 @@ Sorry {language} is not available.
             t.start()
 
         except Exception as e:
-            print(e)
+            Logger().error(e)
 
     if language == "de":
 
@@ -448,7 +480,7 @@ Sorry {language} is not available.
             t.start()
 
         except Exception as e:
-            print(e)
+            Logger().error(e)
 
     elif language == "en":
 
@@ -457,7 +489,7 @@ Sorry {language} is not available.
             t.start()
 
         except Exception as e:
-            print(e)
+            Logger().error(e)
 
 
 @bot.event
@@ -469,7 +501,8 @@ async def on_ready():
         print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTCYAN_EX + f"Synced Application Commands.")
 
     except Exception as e:
-        print(e)
+        Logger().error(e)
+
 
 
 bot.run(client_secret)

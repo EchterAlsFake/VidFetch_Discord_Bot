@@ -1,0 +1,26 @@
+# Ignore everything that is in here, thanks :)
+
+"""
+
+Nachdem ich es jetzt geschafft habe, die formatierten Strings zum laufen zu bekommen, kann ich jetzt
+die anderen Sprachen unterstützen. Ich werde jetzt im folgenden dies tun. die Übersetzung mache ich mit ChatGPT und
+ich erstelle dann für jede Sprache eine .mo Datei und eine .po Datei, sodass andere mit an den Übersetzungen arbeiten können.
+
+Alle .po Files werden dann auf GitHub hochgeladen und die .mo Dateien auch.
+
+Es gibt dann eine feste Struktur, der Dateien.
+
+
+locales /
+    de
+    en
+    usw...
+        LC_MESSAGES /
+            xx.po
+            VidFetch_Discord_Bot.mo
+
+:)
+
+
+
+"""
