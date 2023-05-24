@@ -74,6 +74,10 @@ But you can do some things too:
 - Added support for German
 - Playlist has multithreading support
 
+# Bug fixes:
+
+- 1.3 A regex match error bug was fixed.  More information can be found here: https://github.com/pytube/pytube/issues/1647 Thanks to kof0012 for the solution.
+
 ## Credits:
 
 Icon: https://uxwing.com/black-and-white-youtube-icon/ <br>
