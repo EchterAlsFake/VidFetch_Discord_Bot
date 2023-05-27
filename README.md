@@ -1,5 +1,5 @@
 # Vid Fetch Discord Bot
-## Status: ✔
+## Status: X
 # [Invite Link](https://discord.com/oauth2/authorize?client_id=1093631510428516434&permissions=2147486720&scope=bot)
 
 # What is it? 
