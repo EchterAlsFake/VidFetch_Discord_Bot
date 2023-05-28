@@ -2,6 +2,13 @@
 ## Status: X
 # [Invite Link](https://discord.com/oauth2/authorize?client_id=1093631510428516434&permissions=2147486720&scope=bot)
 
+# Anouncement:
+
+#### This project is closed. Nobody used the bot in the last two months and all the ressources for hosting, developing etc. are not worth it.
+#### I will still update the Bot and push new releases, but I will compile the python to binary and you can host the bot by yourself, when you need it.
+#### Thanks :)
+
+
 # What is it? 
 
 Vid Fetch Bot is a Discord Bot, which downloads YouTube Videos and sends them back to the
