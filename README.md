@@ -81,9 +81,17 @@ But you can do some things too:
 - Added support for German
 - Playlist has multithreading support
 
+## 1.4
+
+- Removed useless functions
+- Cleaner code
+- Changed License from Creative Commons to LGPLv3
+
+
 # Bug fixes:
 
 - 1.3 A regex match error bug was fixed.  More information can be found here: https://github.com/pytube/pytube/issues/1647 Thanks to kof0012 for the solution.
+- 1.4 Fixed a throttling error.  See commit here: https://github.com/pytube/pytube/blob/226db37951d6c2d8f0e3e79db7b63b6956f34486/pytube/cipher.py
 
 ## Credits:
 

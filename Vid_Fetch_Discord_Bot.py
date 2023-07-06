@@ -250,5 +250,5 @@ async def on_ready():
         print(e)
 
 
-bot.run("In the compiled version, the API key is here, but I of course DON'T show it to the public.")
+bot.run("")
 
