@@ -3,5 +3,3 @@ colorama
 discord
 python-dotenv
 moviepy
-tqdm
-requests
