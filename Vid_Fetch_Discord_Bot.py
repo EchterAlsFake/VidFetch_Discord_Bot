@@ -1,3 +1,23 @@
+
+"""
+Copyright (C) 2023  EchterAlsFake* | Johannes Habel
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+* EchterAlsFake is the internet pseudonym for Johannes Habel.
+"""
+
 import threading
 import time
 from pytube import YouTube, Playlist
@@ -7,6 +27,7 @@ from discord.ext import commands
 import os
 import queue
 from moviepy.editor import AudioFileClip
+from logger import logger
 
 """
 Please note:
@@ -28,10 +49,22 @@ It needs the following permissions:
 
 https://github.com/EchterAlsFake/VidFetch_Discord_Bot
 
-Thanks :)
+Thanks :)"""
 
---- Licensed under LGPLv3 License ---"""
+def get_api_key():
+    """
+    If you host the bot on your own:
+    1) Create a Discord Bot on discord developer site
+    2) Set up the Bot (See YouTube tutorials...)
+    3) Get the Bot Secret token
+    4) Create a file called 'api_key'
+    5) Paste the API key into the file
+    6) Done :)
+    """
 
+    with open("api_key", "r") as api:
+        x = api.read()
+        return x
 
 
 intents = discord.Intents.default()
@@ -41,36 +74,39 @@ download_queue = queue.Queue()
 num_threads = 12
 semaphore = threading.Semaphore(num_threads)
 
+
 def download_playlist(user, url):
 
     try:
         p = Playlist(url)
+        logger(msg=f"Got Playlist object for {url}")
 
     except Exception as e:
-        print(e)
+        logger(e, level=1)
 
-    p = Playlist(url)
-    # Enumerating videos
+    else:
 
-    for video in p.video_urls:
-        download_queue.put(video)
-        t1 = threading.Thread(target=download, args=(user, ))
-        t1.start()
+        for video in p.video_urls:
+            download_queue.put(video)
+            t1 = threading.Thread(target=download, args=(user, ))
+            t1.start()
+
 
 def download(user):
     while True:
         try:
             url = download_queue.get(block=False)
-            print("URL is the following: " + url)
+            logger(f"URL in download queue: {url}")
+
         except queue.Empty:
-            print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTYELLOW_EX + f"Queue is empty.")
+            logger(msg="Queue is empty...")
             break
 
         with semaphore:
             try:
                 y = YouTube(url)
                 title = y.title
-                print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTCYAN_EX + f"Download request: {title}")
+                logger(f"Download requested for: {title} from {user}")
                 disallowed_symbols = ["/", ":", "*", "?", "<", ">", "|", "\\"]
 
                 for disallowed_symbol in disallowed_symbols:
@@ -78,45 +114,39 @@ def download(user):
 
                 audio_stream = y.streams.filter(only_audio=True).order_by("abr").last()
 
-
-
                 audio_stream.download(filename=str(title))
                 location = convert_m4a(filename=str(title))
                 bot.loop.create_task(user.send(file=discord.File(str(location))))
-
+                logger("Sent audio file to user...")
                 time.sleep(20)
                 clean_up(file1=str(title), file2=str(location))
+                logger("Cleaned files...")
 
             except Exception as e:
-                print(e)
+                logger(e, level=1)
+                bot.loop.create_task(user.send(f"There was an error with your request... Here's the error: {e}.  Sorry."))
 
 
 def convert_m4a(filename):
-
     audio_stream = AudioFileClip(str(filename))
     audio_stream.write_audiofile(str(filename) + ".m4a", codec="aac")
+    return str(filename) + ".m4a"
 
-    location = str(filename) + ".m4a"
-
-    return location
 
 def clean_up(file1, file2):
-
-    print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTCYAN_EX + "Cleaning Up...")
     os.remove(file1)
     os.remove(file2)
-    print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTYELLOW_EX + "Cleaned Up!")
+
 
 @bot.tree.command(name="download", description="Please set Fast Download to False. It helps my CPU, thanks.)")
 async def video(interaction: discord.Interaction, url : str):
-
-
 
     await interaction.response.send_message(f"""
 Downloading: {url}
 
 The download / upload will take 1-3 minutes. 
 You will get a message in your DMs with the .m4a file.
+Please remember: You need to allow getting messages from unknown server members in your DC settings!
 """)
 
     user = interaction.user
@@ -126,31 +156,32 @@ You will get a message in your DMs with the .m4a file.
         t = threading.Thread(target=download, args=(user, ))
         t.start()
     except Exception as e:
-        bot.loop.create_task(user.send(f"ERROR: {e}"))
+        logger(e, level=1)
+        bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
+
 
 @bot.tree.command(name="playlist", description="Downloads all videos in a playlist.  See /help for more info")
 async def playlist(interaction: discord.Interaction, url : str):
-
 
     await interaction.response.send_message(f"""
 The following playlist will be downloaded: {url}
 Check your DMs for more information.
 """)
 
-
     user = interaction.user
-
     try:
-
         t1 = threading.Thread(target=download_playlist, args=(user, url,))
         t1.start()
 
     except Exception as e:
-        print(e)
+        logger(e, level=1)
+        bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
+
 
 @bot.tree.command(name="help", description="Shows a simple tutorial message.")
 async def help(interaction: discord.Interaction):
     user = interaction.user
+
     def send_help_english_thread():
         bot.loop.create_task(interaction.response.send_message("""
 
@@ -176,20 +207,22 @@ on my GitHub, so that I can fix them. Thanks :)
     try:
         t = threading.Thread(target=send_help_english_thread, args=(user, ))
         t.start()
+
     except Exception as e:
-        print(e)
+        logger(e, level=1)
+        bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
 
 
 @bot.tree.command(name="credits", description="Shows all sources.")
 async def credits(interaction: discord.Interaction):
-
     user = interaction.user
+
     def send_credits_english_thread():
         bot.loop.create_task(interaction.response.send_message("""
 
 Vid Fetch is the Discord Bot of the Vid Fetch YouTube Downloader, which were
 both created by EchterAlsFake in 2023. The Discord Bot itself is licensed under the 
-LGPLv3 license. The Source Code of this Bot can be found on:
+GPLv3 license. The Source Code of this Bot can be found on:
 
 (You should have received a copy of the license within the .zip Archive)
 
@@ -224,19 +257,18 @@ moviepy   - github.com/Zulko/moviepy
 Coded with Python 3.11.4 on Arch Linux
 Compiled with Pyinstaller
 
-Release: 1.4
-6th of July 2023 - Signed by EchterAlsFake | Johannes Habel
+Release: 1.5
+6th of September 2023 - Signed by EchterAlsFake | Johannes Habel
 """))
-
-
-
 
     try:
         t = threading.Thread(target=send_credits_english_thread)
         t.start()
 
     except Exception as e:
-        print(e)
+        logger(e, level=1)
+        bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
+
 
 @bot.event
 async def on_ready():
@@ -250,5 +282,5 @@ async def on_ready():
         print(e)
 
 
-bot.run("")
+bot.run(get_api_key())
 
