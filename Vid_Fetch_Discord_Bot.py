@@ -20,6 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import threading
 import time
+
+import requests
 from pytube import YouTube, Playlist
 from colorama import *
 import discord
@@ -126,6 +128,57 @@ def download(user):
                 logger(e, level=1)
                 bot.loop.create_task(user.send(f"There was an error with your request... Here's the error: {e}.  Sorry."))
 
+def get_highest_resolution(streams):
+
+    valid_resolutions = []
+    resolutions = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "3840p"]
+
+    for stream in streams:
+        for resolution in resolutions:
+
+            if resolution in stream:
+                valid_resolutions.append(resolution)
+
+    if len(valid_resolutions) == 0:
+        logger(msg="Error sorting ")
+
+    else:
+        return valid_resolutions[-1]
+
+
+def get_direct_link(user, url, music, video, highest_res_possible):
+    y = YouTube(url)
+
+    if music:
+        stream = y.streams.get_audio_only().url
+        if requests.get(stream, None).status_code == 200:
+            logger(f"Valid Video Stream for url: {url}")
+            bot.loop.create_task(user.send_message(f"""
+URL for music stream: {url}"""))
+
+        else:
+            logger("Error with music stream", level=1)
+            bot.loop.create_task(user.send(f"There was an error with your request... Sorry'"))
+
+    elif video:
+
+        if highest_res_possible:
+            stream = y.streams.filter(only_video=True, resolution=get_highest_resolution(streams=y.streams.all())).first().url
+            logger(f"Got high quality stream for: {url}")
+            bot.loop.create_task(user.send_message(f"High quality video stream: {url}  Note: the video maybe has NO sound. That's expected and is an 'error' from YouTube"))
+
+        else:
+            streams = y.streams.get_highest_resolution().url
+            logger(f"Got usual quality stream for: {url}")
+            bot.loop.create_task(user.send_message(f"Video: {url}"))
+
+
+
+
+
+
+
+
 
 def convert_m4a(filename):
     audio_stream = AudioFileClip(str(filename))
@@ -177,6 +230,17 @@ Check your DMs for more information.
         logger(e, level=1)
         bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
 
+@bot.tree.command(name="get_direct_link", description="Gives you the direct download link to the video. This function supports high quality videos!")
+async def direct_link(interaction: discord.Interaction, url : str, music : bool, video: bool):
+    user = interaction.user
+
+    try:
+        t1 = threading.Thread(target=get_direct_link, args=(user, url, music, video))
+        t1.start()
+
+    except Exception as e:
+        logger(e, level=1)
+        bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
 
 @bot.tree.command(name="help", description="Shows a simple tutorial message.")
 async def help(interaction: discord.Interaction):
