@@ -230,6 +230,7 @@ Check your DMs for more information.
         logger(e, level=1)
         bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
 
+
 @bot.tree.command(name="get_direct_link", description="Gives you the direct download link to the video. This function supports high quality videos!")
 async def direct_link(interaction: discord.Interaction, url : str, music : bool, video: bool):
     user = interaction.user
