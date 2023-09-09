@@ -27,6 +27,7 @@ downloading music videos
 - Downloading a video
 - m4a codec support
 - Download a whole playlist
+- Get a direct download link for videos
 - Integrated threading for faster download
 - Intuitive application commands
 

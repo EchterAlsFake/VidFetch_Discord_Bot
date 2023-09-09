@@ -128,6 +128,31 @@ def download(user):
                 logger(e, level=1)
                 bot.loop.create_task(user.send(f"There was an error with your request... Here's the error: {e}.  Sorry."))
 
+
+def verify_stream(user, stream):
+    h = requests.head(stream, allow_redirects=True)
+    header = h.headers
+    content_type = header.get('content-type')
+    if 'text' in content_type.lower():
+        logger("Error with music stream", level=1)
+        bot.loop.create_task(user.send(f"There was an error with your request... Sorry'"))
+
+    if 'html' in content_type.lower():
+        logger("Error with music stream", level=1)
+        bot.loop.create_task(user.send(f"There was an error with your request... Sorry'"))
+
+    else:
+        logger(f"Valid Video Stream for url: {stream}")
+        bot.loop.create_task(user.send(f"""
+URL: {stream}
+
+1) Open the URL in your browser
+2) Click on the 3 dot menu
+3) Click on the Download button
+
+Enjoy :)"""))
+
+
 def get_highest_resolution(streams):
 
     valid_resolutions = []
@@ -151,33 +176,23 @@ def get_direct_link(user, url, music, video, highest_res_possible):
 
     if music:
         stream = y.streams.get_audio_only().url
-        if requests.get(stream, None).status_code == 200:
-            logger(f"Valid Video Stream for url: {url}")
-            bot.loop.create_task(user.send_message(f"""
-URL for music stream: {url}"""))
-
-        else:
-            logger("Error with music stream", level=1)
-            bot.loop.create_task(user.send(f"There was an error with your request... Sorry'"))
+        logger(msg="Got a music stream")
+        verify_stream(user, stream)
 
     elif video:
 
         if highest_res_possible:
-            stream = y.streams.filter(only_video=True, resolution=get_highest_resolution(streams=y.streams.all())).first().url
+            resolutions = y.streams.order_by("resolution")
+            x = resolutions[-1]
+
+            stream = y.streams.filter(only_video=True, resolution=x.resolution).first().url
             logger(f"Got high quality stream for: {url}")
-            bot.loop.create_task(user.send_message(f"High quality video stream: {url}  Note: the video maybe has NO sound. That's expected and is an 'error' from YouTube"))
+            verify_stream(user, stream)
 
         else:
-            streams = y.streams.get_highest_resolution().url
+            stream = y.streams.get_highest_resolution().url
             logger(f"Got usual quality stream for: {url}")
-            bot.loop.create_task(user.send_message(f"Video: {url}"))
-
-
-
-
-
-
-
+            verify_stream(user, stream)
 
 
 def convert_m4a(filename):
@@ -208,6 +223,7 @@ Please remember: You need to allow getting messages from unknown server members 
     try:
         t = threading.Thread(target=download, args=(user, ))
         t.start()
+        logger("Started Thread for getting direct url")
     except Exception as e:
         logger(e, level=1)
         bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
@@ -232,11 +248,12 @@ Check your DMs for more information.
 
 
 @bot.tree.command(name="get_direct_link", description="Gives you the direct download link to the video. This function supports high quality videos!")
-async def direct_link(interaction: discord.Interaction, url : str, music : bool, video: bool):
+async def direct_link(interaction: discord.Interaction, url : str, music : bool, video: bool, highest_resolution : bool):
     user = interaction.user
+    await interaction.response.send_message("Processing your request...")
 
     try:
-        t1 = threading.Thread(target=get_direct_link, args=(user, url, music, video))
+        t1 = threading.Thread(target=get_direct_link, args=(user, url, music, video, highest_resolution))
         t1.start()
 
     except Exception as e:
@@ -254,19 +271,13 @@ Commands:
 
 /help - Shows this message
 /download [url] - Downloads the video and sends it back as .m4a file
+/playlist [url] - Downloads all videos in a playlist
+/get_direct_link [url] [video] [music] [highest_resolution]  *
 /credits - shows the sources / developing process
 
-Optional:
-
-/download [fast_download] - True: The Video will be downloaded with Pytube, on max speed.
-                            False: The Video will be downloaded with wget. Takes longer, but
-                            helps my computer, as it doesn't need so much CPU Power. If you can, please
-                            set fast_download to False. Thanks :) 
-
-Error messages:
-
-Error messages will be sent to the user. Maybe you can do something with it, or at least you can post them
-on my GitHub, so that I can fix them. Thanks :) 
+* returns you the direct download url of the video.
+So you can download like a really big video. Just click on the link 
+and the download should be started in your default browser :) 
 
 """))
     try:
@@ -288,8 +299,6 @@ async def credits(interaction: discord.Interaction):
 Vid Fetch is the Discord Bot of the Vid Fetch YouTube Downloader, which were
 both created by EchterAlsFake in 2023. The Discord Bot itself is licensed under the 
 GPLv3 license. The Source Code of this Bot can be found on:
-
-(You should have received a copy of the license within the .zip Archive)
 
 https://github.com/EchterAlsFake/VidFetch_Discord_Bot
 
@@ -319,7 +328,7 @@ os        - built-in
 queue     - built-in
 moviepy   - github.com/Zulko/moviepy
 
-Coded with Python 3.11.4 on Arch Linux
+Coded with Python 3.11 on Arch Linux
 Compiled with Pyinstaller
 
 Release: 1.5

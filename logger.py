@@ -1,6 +1,6 @@
 """
 Copyright (C) 2023  EchterAlsFake | Johannes Habel
-Full copyright information can be found in the 'Vid_Fetch_Discord_Bot.py' file
+Full copyright information can be found in the 'VidFetch_Discord_Bot.py' file
 """
 
 from colorama import *
