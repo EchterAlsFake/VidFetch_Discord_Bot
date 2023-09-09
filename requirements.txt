@@ -2,3 +2,4 @@ pytube
 colorama
 discord
 moviepy
+requests

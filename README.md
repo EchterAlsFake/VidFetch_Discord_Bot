@@ -14,6 +14,7 @@ X = Code working, but bot is not running
 - [Bot commands](#application-commands)
 - [Requirements](#requirements)
 - [Open Source Information](#open-source-information)
+- [Hosting](#hosting)
 - [License](#license)
 
 # Description
@@ -57,6 +58,20 @@ I need to keep the background running application closed,
 If you don't trust me, you can easily
 <br> all my code, create your own bot on discord developer portal and use your
 <br>own API key :) 
+# Hosting
+
+I have no resources to buy a hosting server for the bot.
+<br>In the past I had my old laptop for hosting, but it died
+<br> sometimes I can host the bot from my main PC or my phone but
+<br>that are unstable methods.
+
+# BUT 
+
+You can host it by yourself with one click!
+<br>Go [here](https://github.com/VidFetch_Discord_Bot/releases)
+<br>Select the version for either Linux or Windows
+<br>Run it :) 
+
 
 # License
 
