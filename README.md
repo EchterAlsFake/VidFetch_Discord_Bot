@@ -34,13 +34,13 @@ downloading music videos
 
 # Bot commands
 
-| Command          | Description                                                   | Arguments                                                              | Options       |
-|------------------|---------------------------------------------------------------|------------------------------------------------------------------------|---------------|
-| `/download`      | Downloads a video and uploads it to you as .m4a file          | `url`: The video url from YouTube.com                                  | `True`: Yes<br>`False`: No |
-| `/playlist`      | Same as /download but for every video in a YT playlist        | `url`: The playlist url from YouTube.com                               | `True`: Yes<br>`False`: No |
-| `/get_direct_link` | Gives the link of the download source (Supports up to 8K res) | `url`: The video url from YouTube.com  `video`: Download / get video `music`: Download / get music  `highest_resolution`: Go over 720p resolution, but has no music in it. | `True`: Yes<br>`False`: No |
-| `/help`          | Prints a little help message                                  |                                                                        |               |
-| `/credits`       | Credits for all used things in this application               |                                                                        |               |
+| Command          | Description                                                   | Arguments                                                                                                                                                                              | Options       |
+|------------------|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| `/download`      | Downloads a video and uploads it to you as .m4a file          | `url`: The video url from YouTube.com                                                                                                                                                  | `True`: Yes<br>`False`: No |
+| `/playlist`      | Same as /download but for every video in a YT playlist        | `url`: The playlist url from YouTube.com                                                                                                                                               | `True`: Yes<br>`False`: No |
+| `/get_direct_link` | Gives the link of the download source (Supports up to 8K res) | `url`: The video url from YouTube.com <br> `video`: Download / get video <br>`music`: Download / get music  <br>`highest_resolution`: Go over 720p resolution, but has no music in it. | `True`: Yes<br>`False`: No |
+| `/help`          | Prints a little help message                                  |                                                                                                                                                                                        |               |
+| `/credits`       | Credits for all used things in this application               |                                                                                                                                                                                        |               |
 
 # Requirements
 
