@@ -68,7 +68,7 @@ I have no resources to buy a hosting server for the bot.
 # BUT 
 
 You can host it by yourself with one click!
-<br>Go [here](https://github.com/VidFetch_Discord_Bot/releases)
+<br>Go [here](https://github.com/EchterAlsFake/VidFetch_Discord_Bot/releases)
 <br>Select the version for either Linux or Windows
 <br>Run it :) 
 
