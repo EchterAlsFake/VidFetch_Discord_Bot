@@ -11,6 +11,7 @@ X = Code working, but bot is not running
 # Table of contents
 - [Description](#description)
 - [Features](#features)
+- [Bot commands](#application-commands)
 - [Requirements](#requirements)
 - [Open Source Information](#open-source-information)
 - [License](#license)
@@ -30,6 +31,16 @@ downloading music videos
 - Get a direct download link for videos
 - Integrated threading for faster download
 - Intuitive application commands
+
+# Bot commands
+
+| Command          | Description                                                   | Arguments                                                              | Options       |
+|------------------|---------------------------------------------------------------|------------------------------------------------------------------------|---------------|
+| `/download`      | Downloads a video and uploads it to you as .m4a file          | `url`: The video url from YouTube.com                                  | `True`: Yes<br>`False`: No |
+| `/playlist`      | Same as /download but for every video in a YT playlist        | `url`: The playlist url from YouTube.com                               | `True`: Yes<br>`False`: No |
+| `/get_direct_link` | Gives the link of the download source (Supports up to 8K res) | `url`: The video url from YouTube.com  `video`: Download / get video `music`: Download / get music  `highest_resolution`: Go over 720p resolution, but has no music in it. | `True`: Yes<br>`False`: No |
+| `/help`          | Prints a little help message                                  |                                                                        |               |
+| `/credits`       | Credits for all used things in this application               |                                                                        |               |
 
 # Requirements
 
