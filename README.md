@@ -2,7 +2,7 @@
 
 ### You can [invite](https://discord.com/oauth2/authorize?client_id=1093631510428516434&permissions=2147486720&scope=bot) the bot to your server
 
-## Status: Y
+## Status: X
 
 X = Code working, but bot is not running
 <br>Y = Code working and bot is running
