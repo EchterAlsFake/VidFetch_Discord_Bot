@@ -55,8 +55,8 @@ The code here is exactly the same, which is running in the background,
 <br>when you use it. 
 I need to keep the background running application closed,
 <br>to prevent leaking the API key.
-If you don't trust me, you can easily
-<br> all my code, create your own bot on discord developer portal and use your
+If you don't trust me, you can easily copy
+<br> all of my code, create your own bot on the discord developer portal and use your
 <br>own API key :) 
 # Hosting
 
