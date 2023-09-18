@@ -11,7 +11,7 @@ X = Code working, but bot is not running
 # Table of contents
 - [Description](#description)
 - [Features](#features)
-- [Bot commands](#application-commands)
+- [Bot commands](#bot-commands)
 - [Requirements](#requirements)
 - [Open Source Information](#open-source-information)
 - [Hosting](#hosting)
