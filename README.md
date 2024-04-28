@@ -1,5 +1,5 @@
 <div align = center>
-<img src="https://github.com/EchterAlsFake/VidFetch_Discord_Bot/logo.png" alt="Discord Bot Logo" width="350"/>
+<img src="https://github.com/EchterAlsFake/VidFetch_Discord_Bot/blob/fd0f2783ac659a08c14e9f20933bbc74fb150234/logo.png" alt="Discord Bot Logo" width="350"/>
 <br>
 
 # Vid Fetch Discord Bot
