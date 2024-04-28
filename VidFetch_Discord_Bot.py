@@ -152,34 +152,28 @@ URL: {stream}
 Enjoy :)"""))
 
 
-def get_highest_resolution(streams):
-
-    valid_resolutions = []
-    resolutions = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "3840p"]
-
-    for stream in streams:
-        for resolution in resolutions:
-
-            if resolution in stream:
-                valid_resolutions.append(resolution)
-
-    if len(valid_resolutions) == 0:
-        logger(msg="Error sorting ")
-
-    else:
-        return valid_resolutions[-1]
-
-
 def get_direct_link(user, url, music, video, highest_res_possible):
     y = YouTube(url)
 
-    if music:
-        stream = y.streams.get_audio_only().url
-        logger(msg="Got a music stream")
-        verify_stream(user, stream)
+    if music == "True":
+        music = True
 
-    elif video:
+    else:
+        music = False
 
+    if video == "True":
+        video = True
+
+    else:
+        video = False
+
+    if highest_res_possible == "True":
+        highest_res_possible = True
+
+    else:
+        highest_res_possible = False
+
+    if video or video and music:
         if highest_res_possible:
             resolutions = y.streams.order_by("resolution")
             x = resolutions[-1]
@@ -193,6 +187,11 @@ def get_direct_link(user, url, music, video, highest_res_possible):
             logger(f"Got usual quality stream for: {url}")
             verify_stream(user, stream)
 
+    else:
+        stream = y.streams.get_audio_only().url
+        logger(msg="Got a music stream")
+        verify_stream(user, stream)
+
 
 def convert_m4a(filename):
     audio_stream = AudioFileClip(str(filename))
@@ -203,7 +202,6 @@ def convert_m4a(filename):
 def clean_up(file1, file2):
     os.remove(file1)
     os.remove(file2)
-
 
 
 @bot.tree.command()
@@ -241,7 +239,7 @@ Check your DMs for more information.
     highest_resolution=[
         app_commands.Choice(name="Yes", value="True"),
         app_commands.Choice(name="No", value="False")])
-async def direct_link(interaction: Interaction, url : str, music : str, video: str, highest_resolution : str):
+async def direct_link(interaction: Interaction, url: str, music: str, video: str, highest_resolution: str):
     user = interaction.user
     await interaction.response.send_message("Processing your request...")
 
@@ -274,8 +272,9 @@ So you can download like a really big video. Just click on the link
 and the download should be started in your default browser :) 
 
 """))
+
     try:
-        t = threading.Thread(target=send_help_english_thread, args=(user, ))
+        t = threading.Thread(target=send_help_english_thread)
         t.start()
 
     except Exception as e:
