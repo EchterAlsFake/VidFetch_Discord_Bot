@@ -1,12 +1,16 @@
+<div align = center>
+<img src="https://github.com/EchterAlsFake/VidFetch_Discord_Bot/logo.png" alt="Discord Bot Logo" width="350"/>
+<br>
+
 # Vid Fetch Discord Bot
 
-### You can [invite](https://discord.com/oauth2/authorize?client_id=1093631510428516434&scope=applications.commands) the bot to your server
 
-## Status: X
+---
 
-X = Code working, but bot is not running
-<br>Y = Code working and bot is running
-<br>Z = Unknown
+**[<kbd><strong>&nbsp;<br>&nbsp;Invite to your server&nbsp;<br>&nbsp;</strong></kbd>](https://discord.com/oauth2/authorize?client_id=1093631510428516434&scope=applications.commands)** 
+
+---
+</div>
 
 # Table of contents
 - [Description](#description)
