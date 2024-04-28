@@ -1,10 +1,11 @@
 """
-Copyright (C) 2023  EchterAlsFake | Johannes Habel
+Copyright (C) 2024  EchterAlsFake | Johannes Habel
 Full copyright information can be found in the 'VidFetch_Discord_Bot.py' file
 """
 
 from colorama import *
 from datetime import datetime
+
 
 def logger(msg, level=0):
 

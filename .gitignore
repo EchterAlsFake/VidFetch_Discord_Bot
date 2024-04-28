@@ -8,7 +8,7 @@ __pycache__/
 
 # API Tokens
 .env
-
+api_key.txt
 # Distribution / packaging
 .Python
 build/

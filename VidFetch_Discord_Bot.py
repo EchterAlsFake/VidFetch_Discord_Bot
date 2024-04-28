@@ -20,14 +20,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import threading
 import time
-
 import requests
-from pytube import YouTube, Playlist
-from colorama import *
-import discord
-from discord.ext import commands
 import os
 import queue
+
+from pytube import YouTube, Playlist
+from colorama import Fore
+from discord.ext import commands
+from discord import File, Intents, Interaction, app_commands
 from moviepy.editor import AudioFileClip
 from logger import logger
 
@@ -51,7 +51,9 @@ It needs the following permissions:
 
 https://github.com/EchterAlsFake/VidFetch_Discord_Bot
 
-Thanks :)"""
+Thanks :)
+"""
+
 
 def get_api_key():
     """
@@ -64,13 +66,12 @@ def get_api_key():
     6) Done :)
     """
 
-    with open("api_key", "r") as api:
-        x = api.read()
-        return x
+    with open("api_key.txt", "r") as api:
+        return api.read()
 
 
-intents = discord.Intents.default()
-intents.message_content = True
+intents = Intents.default()
+intents.message_content = False
 bot = commands.Bot(command_prefix="!", intents=intents)
 download_queue = queue.Queue()
 num_threads = 12
@@ -78,7 +79,6 @@ semaphore = threading.Semaphore(num_threads)
 
 
 def download_playlist(user, url):
-
     try:
         p = Playlist(url)
         logger(msg=f"Got Playlist object for {url}")
@@ -87,7 +87,6 @@ def download_playlist(user, url):
         logger(e, level=1)
 
     else:
-
         for video in p.video_urls:
             download_queue.put(video)
             t1 = threading.Thread(target=download, args=(user, ))
@@ -118,9 +117,9 @@ def download(user):
 
                 audio_stream.download(filename=str(title))
                 location = convert_m4a(filename=str(title))
-                bot.loop.create_task(user.send(file=discord.File(str(location))))
+                bot.loop.create_task(user.send(file=File(str(location))))
                 logger("Sent audio file to user...")
-                time.sleep(20)
+                time.sleep(10)
                 clean_up(file1=str(title), file2=str(location))
                 logger("Cleaned files...")
 
@@ -206,31 +205,10 @@ def clean_up(file1, file2):
     os.remove(file2)
 
 
-@bot.tree.command(name="download", description="Please set Fast Download to False. It helps my CPU, thanks.)")
-async def video(interaction: discord.Interaction, url : str):
 
-    await interaction.response.send_message(f"""
-Downloading: {url}
-
-The download / upload will take 1-3 minutes. 
-You will get a message in your DMs with the .m4a file.
-Please remember: You need to allow getting messages from unknown server members in your DC settings!
-""")
-
-    user = interaction.user
-    download_queue.put(url)
-
-    try:
-        t = threading.Thread(target=download, args=(user, ))
-        t.start()
-        logger("Started Thread for getting direct url")
-    except Exception as e:
-        logger(e, level=1)
-        bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
-
-
-@bot.tree.command(name="playlist", description="Downloads all videos in a playlist.  See /help for more info")
-async def playlist(interaction: discord.Interaction, url : str):
+@bot.tree.command()
+@app_commands.describe(url="The URL of the YouTube Playlist")
+async def playlist(interaction: Interaction, url : str):
 
     await interaction.response.send_message(f"""
 The following playlist will be downloaded: {url}
@@ -247,8 +225,23 @@ Check your DMs for more information.
         bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
 
 
-@bot.tree.command(name="get_direct_link", description="Gives you the direct download link to the video. This function supports high quality videos!")
-async def direct_link(interaction: discord.Interaction, url : str, music : bool, video: bool, highest_resolution : bool):
+@bot.tree.command()
+@app_commands.describe(url="The URL of the Video", music="If you want to convert it to music",
+                               video="If it's supposed to be a video",
+                               highest_resolution="If the video should be highest resolution (The video doesn't have sound then)")
+@app_commands.choices(music=[
+    app_commands.Choice(name="Yes", value="True"),
+    app_commands.Choice(name="No", value="False"),
+],
+    video=[
+        app_commands.Choice(name="Yes", value="True"),
+        app_commands.Choice(name="No", value="False"),
+    ],
+
+    highest_resolution=[
+        app_commands.Choice(name="Yes", value="True"),
+        app_commands.Choice(name="No", value="False")])
+async def direct_link(interaction: Interaction, url : str, music : str, video: str, highest_resolution : str):
     user = interaction.user
     await interaction.response.send_message("Processing your request...")
 
@@ -260,8 +253,9 @@ async def direct_link(interaction: discord.Interaction, url : str, music : bool,
         logger(e, level=1)
         bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
 
-@bot.tree.command(name="help", description="Shows a simple tutorial message.")
-async def help(interaction: discord.Interaction):
+
+@bot.tree.command(name="help", description="Sends a help message")
+async def help(interaction: Interaction):
     user = interaction.user
 
     def send_help_english_thread():
@@ -290,7 +284,7 @@ and the download should be started in your default browser :)
 
 
 @bot.tree.command(name="credits", description="Shows all sources.")
-async def credits(interaction: discord.Interaction):
+async def credits(interaction: Interaction):
     user = interaction.user
 
     def send_credits_english_thread():
@@ -331,8 +325,8 @@ moviepy   - github.com/Zulko/moviepy
 Coded with Python 3.11 on Arch Linux
 Compiled with Pyinstaller
 
-Release: 1.5
-6th of September 2023 - Signed by EchterAlsFake | Johannes Habel
+Release: 1.6
+28th of April 2024
 """))
 
     try:
@@ -344,10 +338,23 @@ Release: 1.5
         bot.loop.create_task(user.send_message(f"There was an error: {e} Sorry for the inconvenience!"))
 
 
+@bot.tree.command()
+@app_commands.describe(url="The URL of the YouTube video")
+async def video(interaction: Interaction, url: str):
+    await interaction.response.send_message(f"You request ({url}) was added to the queue. Please wait, it can take some time.")
+
+    download_queue.put(url)
+    try:
+        t = threading.Thread(target=download, args=(interaction.user, ))
+        t.start()
+
+    except Exception as e:
+        bot.loop.create_task(interaction.user.send_message(f"There was an unexpected error. Please report the following: {e}"))
+
+
 @bot.event
 async def on_ready():
     print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTYELLOW_EX + "Bot is ready!")
-
     try:
         await bot.tree.sync()
         print(Fore.LIGHTGREEN_EX + "[+]" + Fore.LIGHTCYAN_EX + f"Synced Application Commands.")

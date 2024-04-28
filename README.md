@@ -1,6 +1,6 @@
 # Vid Fetch Discord Bot
 
-### You can [invite](https://discord.com/oauth2/authorize?client_id=1093631510428516434&permissions=2147486720&scope=bot) the bot to your server
+### You can [invite](https://discord.com/oauth2/authorize?client_id=1093631510428516434&scope=applications.commands) the bot to your server
 
 ## Status: X
 
