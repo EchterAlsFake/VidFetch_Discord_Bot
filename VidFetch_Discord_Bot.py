@@ -74,8 +74,14 @@ intents = Intents.default()
 intents.message_content = False
 bot = commands.Bot(command_prefix="!", intents=intents)
 download_queue = queue.Queue()
-num_threads = 12
+num_threads = 2
 semaphore = threading.Semaphore(num_threads)
+
+android = True
+text = """
+Warning: This bot currently runs on my Android device! Downloading is NOT possible due to my low upload speed. 
+Please use the `get direct link` function instead!
+"""
 
 
 def download_playlist(user, url):
@@ -207,6 +213,9 @@ def clean_up(file1, file2):
 @bot.tree.command()
 @app_commands.describe(url="The URL of the YouTube Playlist")
 async def playlist(interaction: Interaction, url : str):
+    if android:
+        await interaction.response.send_message(text)
+        return
 
     await interaction.response.send_message(f"""
 The following playlist will be downloaded: {url}
@@ -340,6 +349,10 @@ Release: 1.6
 @bot.tree.command()
 @app_commands.describe(url="The URL of the YouTube video")
 async def video(interaction: Interaction, url: str):
+    if android:
+        await interaction.response.send_message(text)
+        return
+
     await interaction.response.send_message(f"You request ({url}) was added to the queue. Please wait, it can take some time.")
 
     download_queue.put(url)
