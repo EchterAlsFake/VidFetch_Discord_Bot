@@ -302,10 +302,10 @@ Vid Fetch is the Discord Bot of the Vid Fetch YouTube Downloader, which were
 both created by EchterAlsFake in 2023. The Discord Bot itself is licensed under the 
 GPLv3 license. The Source Code of this Bot can be found on:
 
-https://github.com/EchterAlsFake/VidFetch_Discord_Bot
+<https://github.com/EchterAlsFake/VidFetch_Discord_Bot>
 
-The URL of the Bot Picture is: https://uxwing.com/black-and-white-youtube-icon/
-The Framework for the YouTube Downloader is: https://github.com/pytube/pytube
+The URL of the Bot Picture is: <https://uxwing.com/black-and-white-youtube-icon/>
+The Framework for the YouTube Downloader is: <https://github.com/pytube/pytube>
 
 The bot is hosted on my own Laptop or by some random guys from the Internet.
 Everyone can access the bot on my GitHub and host it on their own system.
@@ -313,9 +313,6 @@ Everyone can access the bot on my GitHub and host it on their own system.
 I am not responsible for damages on your system caused by third party sources.
 
 Have a great day :) 
-
-[Donation link (Only if you want)  paypal.me/EchterAlsFake]
-
 
 For developers:
 
